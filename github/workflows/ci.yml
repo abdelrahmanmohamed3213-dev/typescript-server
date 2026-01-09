@@ -1,0 +1,54 @@
+name : Build Typescript Server
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: Ubuntu-latest
+    steps:
+      - name : Clone the repo
+        uses : actions/checkout@v5
+      - name : Use Node.js
+        uses : actions/setup-node@v4
+        with : 
+          node-version: 20.x
+          cache: 'npm'
+      - name : install dependencies
+        run : npm ci
+      - name : Checking types
+        run :  npm run type-check
+      - name : formatting 
+        run : npm run format
+      - name : Checking lintting
+        run : npm run lint
+      - name : lintting the files
+        run : npm run lint:fix
+      - name : Building
+        run : npm run build
+  test:
+    runs-on: Ubuntu-latest
+    steps:
+      - name : Clone the repo
+        uses : actions/checkout
+      - name : Use Node.js
+        uses : actions/setup-node
+        with : 
+          node-version: 20.x
+          cache: 'npm'
+      - name : Installing dependencies
+        run : npm ci
+      - name : Testing
+        run : npm run test
+      - name : Coverage
+        run : npm run coverage
+      - name: Archive production artifacts
+        uses : actions/upload-artifact@v4
+        with :
+          name: dist-without-markdown
+          path: |
+            dist
+            !dist/**/*.md
+      - name: Archive Code Coverage Results
+        uses : actions/upload-artifact
+        with : 
+          name : code-coverage-report
+          path : output/test/code-coverage.html
