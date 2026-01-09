@@ -1,4 +1,4 @@
-import { storage } from "./storage";
+
 
 interface Blog {
   id: number;
@@ -8,7 +8,7 @@ interface Blog {
   createdAt: Date;
 }
 
-const blogs: Blog[] = storage.entites
+const blogs: Blog[] = []
 let nextId = 1;
 
 export const resetBlogs = () => {
